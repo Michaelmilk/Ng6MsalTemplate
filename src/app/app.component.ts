@@ -4,6 +4,9 @@ import { BaseComponent } from './component/base/base.component';
 import { Logger } from './helper/logger';
 import { BaseService } from './component/base/base.service';
 import { MsalService } from './helper/msal/msal.service';
+import { MsGraphService } from './component/base/msGraphService';
+import { AuthUser } from './core/authUser';
+
 
 @Component({
     selector: 'app-root',
@@ -12,20 +15,15 @@ import { MsalService } from './helper/msal/msal.service';
 })
 export class AppComponent extends BaseComponent implements OnInit {
     title = 'Ng6Template';
+    user: AuthUser;
 
     constructor(
         protected logger: Logger,
         private msalService: MsalService,
-        private baseService: BaseService
+        private baseService: BaseService,
+        private msGraphService: MsGraphService
     ) {
         super(logger);
-        // this.logger.info("app component start");
-        
-        //this.msalService.login();
-
-        this.msalService.getUser().then((user) => {
-            this.logger.info("user", user);
-        });
         
         this.msalService.authenticated.then((isAuthenticated: boolean) => {
             this.logger.info("isauth", isAuthenticated);
@@ -36,11 +34,15 @@ export class AppComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit () {
-        
-    }
-
-    login() {
-        this.msalService.login();
+        console.log("init");
+        this.user = new AuthUser();
+        this.msalService.getUser().then((user: any) => {
+            this.logger.info("user", user);
+            this.user = new AuthUser(user.name, user.displayableId);
+            this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+                this.createImageFromBlob(photoBlob, this.user);
+            })
+        });
     }
 
     logout() {

@@ -53,4 +53,6 @@
 <i class="fas fa-chart-bar"></i>
 
 <button class="btn btn-primary" (click)="testGraphApi()">Test</button>
-<button class="btn btn-primary" (click)="login()">login</button>
+<div>
+    <img class="rounded-circle mr-2 user-photo " *ngIf="user.photo " [src]="user.photo | safeUrl">
+</div>

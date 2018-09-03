@@ -9,6 +9,8 @@ import { Constants } from './core/constants';
 import { MsalModule } from './helper/msal/msal.module';
 import { BaseService } from './component/base/base.service';
 import { MsalInterceptor } from './helper/msal/msal.interceptor';
+import { MsGraphService } from './component/base/msGraphService';
+import { PipeModule } from './pipe/pipe.module';
 
 
 @NgModule({
@@ -18,7 +20,8 @@ import { MsalInterceptor } from './helper/msal/msal.interceptor';
     imports: [
         BrowserModule,
         HttpClientModule,
-        MsalModule.forRoot(environment.msalConfig)
+        MsalModule.forRoot(environment.msalConfig),
+        PipeModule
     ],
     providers: [
         Logger,
@@ -29,7 +32,8 @@ import { MsalInterceptor } from './helper/msal/msal.interceptor';
             provide: HTTP_INTERCEPTORS,
             useClass: MsalInterceptor,
             multi: true
-        }
+        },
+        MsGraphService
     ],
     bootstrap: [AppComponent]
 })

@@ -4,7 +4,7 @@ import { MsalConfig } from "../app/helper/msal/msal-config";
 export const environmentEculid = {
     production: false,
     serverBaseUrl: "",
-    msGraphBaseUrl: "https://graph.microsoft.com/v1.0/",
+    msGraphBaseUrl: "https://graph.microsoft.com/v1.0",
     logLevel: LoggerLevel.Trace,
     //params detail: https://github.com/azuread/microsoft-authentication-library-for-js/wiki/MSAL-basics
     msalConfig: {

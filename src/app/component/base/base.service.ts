@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
 import { MsalService } from '../../helper/msal/msal.service';
 
 @Injectable()
-export class BaseService implements OnInit {
+export class BaseService {
 	serverUrl: string = environment.serverBaseUrl;
     msGraphUrl = environment.msGraphBaseUrl;
 
@@ -25,8 +25,6 @@ export class BaseService implements OnInit {
         private msalService: MsalService
     ) {
 	}
-
-	ngOnInit() { }
 
 	testGraphApi() {
         this.msalService.getUser().then((user: any) => {
