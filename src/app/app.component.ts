@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { BaseComponent } from './component/base/base.component';
 import { Logger } from './helper/logger';
@@ -10,7 +10,7 @@ import { MsalService } from './helper/msal/msal.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent extends BaseComponent {
+export class AppComponent extends BaseComponent implements OnInit {
     title = 'Ng6Template';
 
     constructor(
@@ -19,8 +19,27 @@ export class AppComponent extends BaseComponent {
         private baseService: BaseService
     ) {
         super(logger);
-        this.logger.info("app component start");
+        // this.logger.info("app component start");
+        
+        //this.msalService.login();
 
+        this.msalService.getUser().then((user) => {
+            this.logger.info("user", user);
+        });
+        
+        this.msalService.authenticated.then((isAuthenticated: boolean) => {
+            this.logger.info("isauth", isAuthenticated);
+            if (!isAuthenticated) {
+                this.msalService.login();
+            }
+        })
+    }
+
+    ngOnInit () {
+        
+    }
+
+    login() {
         this.msalService.login();
     }
 

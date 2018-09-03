@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '../../node_modules/@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
@@ -8,7 +8,7 @@ import { Logger } from './helper/logger';
 import { Constants } from './core/constants';
 import { MsalModule } from './helper/msal/msal.module';
 import { BaseService } from './component/base/base.service';
-import { HttpClientModule } from '../../node_modules/@angular/common/http';
+import { MsalInterceptor } from './helper/msal/msal.interceptor';
 
 
 @NgModule({
@@ -24,7 +24,12 @@ import { HttpClientModule } from '../../node_modules/@angular/common/http';
         Logger,
         { provide: 'loggerName', useValue: Constants.loggerName },
         { provide: 'loggerLevel', useValue: environment.logLevel },
-        BaseService
+        BaseService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: MsalInterceptor,
+            multi: true
+        }
     ],
     bootstrap: [AppComponent]
 })

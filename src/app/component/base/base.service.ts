@@ -33,21 +33,17 @@ export class BaseService implements OnInit {
             console.log("uesr", user);
         });
         
-        this.msalService.getToken().then((token: any) => {
-            console.log("token", token);
+        const headers = new HttpHeaders({ });
+        this.httpClient.get(`${this.msGraphUrl}/me`, { headers: headers }).subscribe((userInfo: any) => {
+            console.log("userinfo", userInfo);
+        });
 
-            const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-            this.httpClient.get(`${this.msGraphUrl}/me`, { headers: headers }).subscribe((userInfo: any) => {
-                console.log("userinfo", userInfo);
-            });
+        this.httpClient.get(`${this.msGraphUrl}/me/photo/$value`, { headers: headers }).subscribe((photo: any) => {
+            console.log("userinfo", photo);
+        });
 
-            this.httpClient.get(`${this.msGraphUrl}/me/photo/$value`, { headers: headers }).subscribe((photo: any) => {
-                console.log("userinfo", photo);
-            });
-
-            this.httpClient.get(`${this.msGraphUrl}/users/danipi@M365x342201.onmicrosoft.com`, { headers: headers }).subscribe((photo: any) => {
-                console.log("userinfo", photo);
-            });
-        })
+        this.httpClient.get(`${this.msGraphUrl}/users/danipi@M365x342201.onmicrosoft.com`, { headers: headers }).subscribe((photo: any) => {
+            console.log("userinfo", photo);
+        });
     }
 }
