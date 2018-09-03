@@ -36,7 +36,7 @@ export class BaseService {
             console.log("userinfo", userInfo);
         });
 
-        this.httpClient.get(`${this.msGraphUrl}/me/photo/$value`, { headers: headers }).subscribe((photo: any) => {
+        this.httpClient.get(`${this.msGraphUrl}/users/danipi@M365x342201.onmicrosoft.com/photo/$value`, { headers: headers }).subscribe((photo: any) => {
             console.log("userinfo", photo);
         });
 
