@@ -1,7 +1,7 @@
 import * as log from "loglevel";
 import { Injectable, Inject } from "@angular/core";
 import { Constants } from "../core/constants";
-import { LogLevel } from "../core/logger";
+import { LoggerLevel } from "../core/logger";
 import { environment } from "../../environments/environment";
 
 @Injectable()
@@ -10,7 +10,7 @@ export class Logger {
 
     constructor(
         @Inject("loggerName") public loggerName?: string,
-        @Inject("loggerLevel") public logLevel?: LogLevel
+        @Inject("loggerLevel") public logLevel?: LoggerLevel
     ) {
         if (!loggerName) {
             loggerName = Constants.loggerName;
@@ -43,25 +43,25 @@ export class Logger {
         return this.logger.getLevel();
     }
 
-    configLogLevel(logLevel?: LogLevel) {
+    configLogLevel(logLevel?: LoggerLevel) {
         var appliedLogLevel = environment.logLevel;
         if (logLevel != null) {
             appliedLogLevel = logLevel;
         }
         switch (appliedLogLevel) {
-            case LogLevel.Trace:
+            case LoggerLevel.Trace:
                 this.logger.setLevel("trace");
                 break;
-            case LogLevel.Debug:
+            case LoggerLevel.Debug:
                 this.logger.setLevel("debug");
                 break;
-            case LogLevel.Info:
+            case LoggerLevel.Info:
                 this.logger.setLevel("info");
                 break;
-            case LogLevel.Warn:
+            case LoggerLevel.Warning:
                 this.logger.setLevel("warn");
                 break;
-            case LogLevel.Error:
+            case LoggerLevel.Error:
                 this.logger.setLevel("error");
                 break;
             default:
