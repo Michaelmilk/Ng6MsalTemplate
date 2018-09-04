@@ -24,7 +24,7 @@ export class AppComponent extends BaseComponent implements OnInit {
         private msGraphService: MsGraphService
     ) {
         super(logger);
-        
+
         this.msalService.authenticated.then((isAuthenticated: boolean) => {
             this.logger.info("isauth", isAuthenticated);
             if (!isAuthenticated) {
@@ -33,15 +33,18 @@ export class AppComponent extends BaseComponent implements OnInit {
         })
     }
 
-    ngOnInit () {
+    ngOnInit() {
         console.log("init");
         this.user = new AuthUser();
         this.msalService.getUser().then((user: any) => {
             this.logger.info("user", user);
-            this.user = new AuthUser(user.name, user.displayableId);
-            this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
-                this.createImageFromBlob(photoBlob, this.user);
-            })
+            if (user.displayableId) {
+                this.user = new AuthUser(user.name, user.displayableId);
+                this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+                    this.createImageFromBlob(photoBlob, this.user);
+                })
+            }
+
         });
     }
 
