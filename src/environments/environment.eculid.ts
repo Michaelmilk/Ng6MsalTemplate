@@ -11,10 +11,16 @@ export const environmentEculid = {
         clientID: '986a27b6-e88e-4471-a0ba-dcd5e33477c5',
         graphScopes: ["Mail.Send", "User.Read", "User.ReadWrite", "User.ReadBasic.All", "User.Read.All", "User.ReadWrite.All", "Directory.Read.All", "Directory.ReadWrite.All", "Directory.AccessAsUser.All"],
         tenant: 'M365x342201.onmicrosoft.com',
-        redirectUri: "http://localhost:4200",
+        redirectUrl: "http://localhost:4200",
         endPoints: ["https://graph.microsoft.com/v1.0/"],
         popUp: true,
         navigateToLoginRequestUrl: false,
+        callback: (errorDesc: any, token: any, error: any, tokenType: any) => {
+            console.log("callback")
+            if (error) {
+                console.error(`${error} ${errorDesc}`);
+            }
+        }
         //authority: "https://login.microsoftonline.com/common/",
         //validateAuthority: true,
         // cacheLocation: "localStorage",

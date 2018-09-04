@@ -36,6 +36,38 @@ export class AppComponent extends BaseComponent implements OnInit {
     ngOnInit() {
         console.log("init");
         this.user = new AuthUser();
+        setTimeout(() => {
+            this.msalService.getUser().then((user: any) => {
+                this.logger.info("user", user);
+                if (user.displayableId) {
+                    this.user = new AuthUser(user.name, user.displayableId);
+                    this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+                        this.createImageFromBlob(photoBlob, this.user);
+                    })
+                }});
+        }, 5000);
+    }
+
+    getLoginUser() {
+        this.msalService.getUser().then((user: any) => {
+            this.logger.info("user", user);
+            if (user.displayableId) {
+                this.user = new AuthUser(user.name, user.displayableId);
+                this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+                    this.createImageFromBlob(photoBlob, this.user);
+                })
+            }});
+    }
+
+    logout() {
+        this.msalService.logout();
+    }
+
+    testGraphApi() {
+        //this.baseService.testGraphApi();
+        this.msalService.authenticated.then((isAuthenticated: boolean) => {
+            this.logger.info("isauth", isAuthenticated);
+        })
         this.msalService.getUser().then((user: any) => {
             this.logger.info("user", user);
             if (user.displayableId) {
@@ -44,15 +76,6 @@ export class AppComponent extends BaseComponent implements OnInit {
                     this.createImageFromBlob(photoBlob, this.user);
                 })
             }
-
         });
-    }
-
-    logout() {
-        this.msalService.logout();
-    }
-
-    testGraphApi() {
-        this.baseService.testGraphApi();
     }
 }

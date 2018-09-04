@@ -20,6 +20,7 @@ export class MsalService {
             navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl == null ? this.config.navigateToLoginRequestUrl : false
         } as MsalConfig
         const authority = config.authority;
+        console.log(this.config);
         this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
             {
                 cacheLocation: "localStorage",
@@ -100,7 +101,6 @@ export class MsalService {
     private getFullUrl(url: string): string {
         // this create a absolute url from a relative one.
         const pat = /^https?:\/\//i;
-        console.log(url, this.origin() + url);
         return pat.test(url) ? url : this.origin() + url;
     }
 
