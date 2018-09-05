@@ -17,7 +17,7 @@ import { MsalService } from '../../helper/msal/msal.service';
 
 export class BaseService {
 	serverUrl: string = environment.serverBaseUrl;
-    msGraphUrl = environment.msGraphBaseUrl;
+    msGraphUrl: string = environment.msGraphBaseUrl;
 
     constructor(
         public logger: Logger, 
