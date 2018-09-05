@@ -6,6 +6,8 @@ import { BaseService } from './component/base/base.service';
 import { MsalService } from './helper/msal/msal.service';
 import { MsGraphService } from './component/base/msGraphService';
 import { AuthUser } from './core/authUser';
+import { interval, observable, timer } from '../../node_modules/rxjs';
+import { switchMap } from '../../node_modules/rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +18,6 @@ export class AppComponent extends BaseComponent implements OnInit {
     title = 'Ng6Template';
     user: AuthUser;
     timeInterval: any;
-    previous: AuthUser;
 
     constructor(
         protected logger: Logger,
@@ -36,22 +37,36 @@ export class AppComponent extends BaseComponent implements OnInit {
     ngOnInit() {
         this.user = new AuthUser();
 
-        this.timeInterval = setInterval(() => {
-            if (!this.user.email) {
-                this.msalService.getUser().then((user: any) => {
+        // this.timeInterval = setInterval(() => {
+        //     if (!this.user.email) {
+        //         this.msalService.getUser().then((user: any) => {
+        //             this.logger.info("user", user);
+        //             if (user.displayableId) {
+        //                 this.user = new AuthUser(user.name, user.displayableId);
+        //                 this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+        //                     this.createImageFromBlob(photoBlob, this.user);
+        //                 })
+        //                 this.logger.info("clear time interval", this.user.email);
+        //                 clearInterval(this.timeInterval);
+        //             }
+        //             this.previous = this.user;
+        //         });
+        //     } 
+        // }, 1000);
+
+        this.timeInterval = interval(1000)
+            .pipe(switchMap(() => this.msalService.getUser()))
+            .subscribe((user: any) => {
+                if (user.displayableId && !this.user.email) {
                     this.logger.info("user", user);
-                    if (user.displayableId) {
-                        this.user = new AuthUser(user.name, user.displayableId);
-                        this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
-                            this.createImageFromBlob(photoBlob, this.user);
-                        })
-                        this.logger.info("clear time interval", this.user.email);
-                        clearInterval(this.timeInterval);
-                    }
-                    this.previous = this.user;
-                });
-            } 
-        }, 1000);
+                    this.user = new AuthUser(user.name, user.displayableId);
+                    this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+                        this.createImageFromBlob(photoBlob, this.user);
+                    })
+                    this.logger.info("clear time interval", this.user.email);
+                    this.timeInterval.unsubscribe();
+                }
+            });
     }
 
     logout() {
