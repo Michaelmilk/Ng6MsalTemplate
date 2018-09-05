@@ -7,7 +7,6 @@ import { MsalService } from './helper/msal/msal.service';
 import { MsGraphService } from './component/base/msGraphService';
 import { AuthUser } from './core/authUser';
 
-
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -16,11 +15,12 @@ import { AuthUser } from './core/authUser';
 export class AppComponent extends BaseComponent implements OnInit {
     title = 'Ng6Template';
     user: AuthUser;
+    timeInterval: any;
+    previous: AuthUser;
 
     constructor(
         protected logger: Logger,
         private msalService: MsalService,
-        private baseService: BaseService,
         private msGraphService: MsGraphService
     ) {
         super(logger);
@@ -34,29 +34,24 @@ export class AppComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log("init");
         this.user = new AuthUser();
-        setTimeout(() => {
-            this.msalService.getUser().then((user: any) => {
-                this.logger.info("user", user);
-                if (user.displayableId) {
-                    this.user = new AuthUser(user.name, user.displayableId);
-                    this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
-                        this.createImageFromBlob(photoBlob, this.user);
-                    })
-                }});
-        }, 5000);
-    }
 
-    getLoginUser() {
-        this.msalService.getUser().then((user: any) => {
-            this.logger.info("user", user);
-            if (user.displayableId) {
-                this.user = new AuthUser(user.name, user.displayableId);
-                this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
-                    this.createImageFromBlob(photoBlob, this.user);
-                })
-            }});
+        this.timeInterval = setInterval(() => {
+            if (!this.user.email) {
+                this.msalService.getUser().then((user: any) => {
+                    this.logger.info("user", user);
+                    if (user.displayableId) {
+                        this.user = new AuthUser(user.name, user.displayableId);
+                        this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+                            this.createImageFromBlob(photoBlob, this.user);
+                        })
+                        this.logger.info("clear time interval", this.user.email);
+                        clearInterval(this.timeInterval);
+                    }
+                    this.previous = this.user;
+                });
+            } 
+        }, 1000);
     }
 
     logout() {
@@ -64,18 +59,19 @@ export class AppComponent extends BaseComponent implements OnInit {
     }
 
     testGraphApi() {
-        //this.baseService.testGraphApi();
         this.msalService.authenticated.then((isAuthenticated: boolean) => {
             this.logger.info("isauth", isAuthenticated);
         })
-        this.msalService.getUser().then((user: any) => {
-            this.logger.info("user", user);
-            if (user.displayableId) {
-                this.user = new AuthUser(user.name, user.displayableId);
-                this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
-                    this.createImageFromBlob(photoBlob, this.user);
-                })
-            }
-        });
+
+        if (this.user.email) {
+            this.user = new AuthUser(this.user.name, this.user.email);
+            this.msGraphService.getPhotoByUpn(this.user.email).subscribe((photoBlob) => {
+                this.createImageFromBlob(photoBlob, this.user);
+            })
+
+            this.msGraphService.getUserProfile("danipi@M365x342201.onmicrosoft.com").subscribe((userProfile) => {
+                this.logger.info("profile", userProfile);
+            })
+        }
     }
 }

@@ -21,15 +21,15 @@ import { EMPTY, throwError } from 'rxjs';
 export class MsGraphService {
     serverUrl: string = environment.serverBaseUrl;
     msGraphUrl = environment.msGraphBaseUrl;
-    private headers = new HttpHeaders({ "Content-Type": "application/json" });
+    headers = new HttpHeaders({ "Content-Type": "application/json" });
 
-    constructor(public logger: Logger,
+    constructor(
+        public logger: Logger,
         public httpClient: HttpClient
     ) {
     }
 
     public getPhotoByUpn(upn: string) {
-        console.log('Get photot called');
         return this.httpClient.get(`${this.msGraphUrl}/users/${upn}/photo/$value`,
             {
                 headers: new HttpHeaders().append('Content-Type', 'image/jpg'),
@@ -47,5 +47,13 @@ export class MsGraphService {
                     }
                 })
             );
+    }
+
+    public getUserProfile(upn: string) {
+        return this.httpClient.get(`${this.msGraphUrl}/users/${upn}`, { headers: this.headers });
+    }
+
+    public getMyProfile() {
+        return this.httpClient.get(`${this.msGraphUrl}/me`, { headers: this.headers });
     }
 }

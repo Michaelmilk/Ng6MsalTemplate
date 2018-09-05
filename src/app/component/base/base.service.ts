@@ -15,33 +15,14 @@ import { Logger } from '../../helper/logger';
 import { environment } from '../../../environments/environment';
 import { MsalService } from '../../helper/msal/msal.service';
 
-@Injectable()
 export class BaseService {
 	serverUrl: string = environment.serverBaseUrl;
     msGraphUrl = environment.msGraphBaseUrl;
 
-    constructor(public logger: Logger, 
+    constructor(
+        public logger: Logger, 
         public httpClient: HttpClient,
         private msalService: MsalService
     ) {
 	}
-
-	testGraphApi() {
-        this.msalService.getUser().then((user: any) => {
-            console.log("uesr", user);
-        });
-        
-        const headers = new HttpHeaders({ });
-        this.httpClient.get(`${this.msGraphUrl}/me`, { headers: headers }).subscribe((userInfo: any) => {
-            console.log("userinfo", userInfo);
-        });
-
-        this.httpClient.get(`${this.msGraphUrl}/users/danipi@M365x342201.onmicrosoft.com/photo/$value`, { headers: headers }).subscribe((photo: any) => {
-            console.log("userinfo", photo);
-        });
-
-        this.httpClient.get(`${this.msGraphUrl}/users/danipi@M365x342201.onmicrosoft.com`, { headers: headers }).subscribe((photo: any) => {
-            console.log("userinfo", photo);
-        });
-    }
 }

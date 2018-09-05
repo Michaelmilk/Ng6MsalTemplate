@@ -14,13 +14,7 @@ export const environmentEculid = {
         redirectUrl: "http://localhost:4200",
         endPoints: ["https://graph.microsoft.com/v1.0/"],
         popUp: true,
-        navigateToLoginRequestUrl: false,
-        callback: (errorDesc: any, token: any, error: any, tokenType: any) => {
-            console.log("callback")
-            if (error) {
-                console.error(`${error} ${errorDesc}`);
-            }
-        }
+        navigateToLoginRequestUrl: false
         //authority: "https://login.microsoftonline.com/common/",
         //validateAuthority: true,
         // cacheLocation: "localStorage",
@@ -37,11 +31,11 @@ export const environmentEculid = {
     } as MsalConfig
 };
 
-export function loggerCallback(logLevel, message, piiEnabled) {
-    console.log("client logging" + message);
-}
+// export function loggerCallback(logLevel, message, piiEnabled) {
+//     console.log("client logging" + message);
+// }
 
 
-export const protectedResourceMap: Map<string, Array<string>> = new Map<string, Array<string>>();
-protectedResourceMap.set("https://buildtodoservice.azurewebsites.net/api/todolist", ["api://a88bb933-319c-41b5-9f04-eff36d985612/access_as_user"]);
-protectedResourceMap.set("https://graph.microsoft.com/v1.0/me", ["user.read"]);
+// export const protectedResourceMap: Map<string, Array<string>> = new Map<string, Array<string>>();
+// protectedResourceMap.set("https://buildtodoservice.azurewebsites.net/api/todolist", ["api://a88bb933-319c-41b5-9f04-eff36d985612/access_as_user"]);
+// protectedResourceMap.set("https://graph.microsoft.com/v1.0/me", ["user.read"]);

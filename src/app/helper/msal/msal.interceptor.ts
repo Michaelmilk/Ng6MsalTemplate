@@ -11,7 +11,6 @@ export class MsalInterceptor implements HttpInterceptor {
 
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (this.msalService.isMsalEndpoint(req.url)) {
-            console.log("isMsalEndpoint");
             return from(this.msalService.getToken().then(token => {
                 const JWT = `Bearer ${token}`;
                 return req.clone({
@@ -21,7 +20,6 @@ export class MsalInterceptor implements HttpInterceptor {
                 });
             })).pipe(mergeMap(r => next.handle(r)));
         } else {
-            console.log("isNotMsalEndpoint", req.url);
             return next.handle(req);
         }
     }

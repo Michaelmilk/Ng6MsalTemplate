@@ -7,7 +7,6 @@ import { environment } from '../environments/environment';
 import { Logger } from './helper/logger';
 import { Constants } from './core/constants';
 import { MsalModule } from './helper/msal/msal.module';
-import { BaseService } from './component/base/base.service';
 import { MsalInterceptor } from './helper/msal/msal.interceptor';
 import { MsGraphService } from './component/base/msGraphService';
 import { PipeModule } from './pipe/pipe.module';
@@ -27,7 +26,6 @@ import { PipeModule } from './pipe/pipe.module';
         Logger,
         { provide: 'loggerName', useValue: Constants.loggerName },
         { provide: 'loggerLevel', useValue: environment.logLevel },
-        BaseService,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: MsalInterceptor,

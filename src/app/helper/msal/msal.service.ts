@@ -20,7 +20,6 @@ export class MsalService {
             navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl == null ? this.config.navigateToLoginRequestUrl : false
         } as MsalConfig
         const authority = config.authority;
-        console.log(this.config);
         this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
             {
                 cacheLocation: "localStorage",
@@ -42,7 +41,6 @@ export class MsalService {
     }
 
     public login() {
-        console.log("ispopup", this.config.popUp);
         return this.config.popUp ?
             this.loginPopup() :
             this.loginRedirect();
@@ -76,12 +74,10 @@ export class MsalService {
                         (token: string) => {
                             return Promise.resolve(token);
                         }, (innererror: any) => {
-                            console.log('Error acquiring the popup:\n' + innererror);
                             return Promise.resolve('');
                         });
                 });
         }, (error: any) => {
-            console.log('Error during login:\n' + error);
             return Promise.resolve('');
         });
     }
